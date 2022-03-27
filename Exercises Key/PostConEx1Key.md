@@ -76,7 +76,7 @@ public int area(int w, int h) {
 	return A;		
 }	
 ```
-Now that we have our function, we want to determine any preconditions and postconditions, so what do we know needs to be true of the area of a rectangle? Firstly, we know that area can never be negative nor zero. Secondly, we also know that in terms of the code, we are returning an integer value, so we have to ensure that w*h do not exceed the range of the type int. So we can write:
+Now that we have our function, we want to determine any preconditions and postconditions, so what do we know needs to be true of the area of a rectangle? Firstly, we know that area can never be negative nor zero. Secondly, we also know that in terms of the code, we are returning an integer value, so we have to ensure that `w*h` do not exceed the range of the type `int`. So we can write:
 ```Java
 //@ requires w > 0 & h > 0;
 //@ requires w < Integer.MAX_VALUE & h < Integer.MAX_VALUE;
@@ -87,7 +87,7 @@ public int area(int w, int h) {
 }	
 ```
 
-However, we're not done yet. Let's say that w = 2, h = 3, then A = 6; what does this mean? This means that since we're multiplying w and h together the result (A) will always be greater than either w or h. Additionally, if `w > 0` and `h > 0`, that means w = 1 and h = 1 which would result in A = 1. So the result could also equal w or h if w = 1 and h = 1. Therefore, we can also ensure the following:
+However, we're not done yet. Let's say that `w = 2`, `h = 3`, then `A = 6`; what does this mean? This means that since we're multiplying w and h together the result `A` will always be greater than either w or h. Additionally, if `w > 0` and `h > 0`, that means when `w = 1` and `h = 1` would result in `A = 1`. So the result could also equal `w` or `h` if `w = 1` and `h = 1`. Therefore, we can also ensure the following:
 ```Java
 //@ requires w > 0 & h > 0;
 //@ requires w < Integer.MAX_VALUE & h < Integer.MAX_VALUE;
@@ -100,4 +100,6 @@ public int area(int w, int h) {
 	return A;		
 }	
 ```
+**Learning Objective:**
+The goal of this exercise is to test the student's ability to find all the pre/postconditions needed when writing a function. The student is tasked with writing a simple function that takes in the width and height of a rectangle and returns the area. It requires that the student have some understanding of mathematics to know that Area can never be negative nor zero. Therefore, the student needs to ensure that the preconditions reflect this. Additionally, it tests that students take into account potential inputs that might cause an over flow error since we are multiply two integers and returning an integer. The bigger test comes with the postconditions. If the student can determine that Area cannot be negative nor zero than what does this ensure of the function? It ensures that the result is always greater than 0, and that the result will always be greater than or equal to the width and height of the rectangle. It is also important that students realize that ensuring these postconditions will prevent any errors that might occur if this code is used in another program and a client tries to input values that are not valid.
 
