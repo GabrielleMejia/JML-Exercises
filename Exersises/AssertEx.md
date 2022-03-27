@@ -10,15 +10,20 @@ title: JML Tutorial - Exercises - ...
 ## **Question 2**
 **Given the function below, what assertions can be concluded?**
 ```Java
-public void max(int a, int b, int c) {
-	int max;
-	if(a >= b && a >= c) {
-		max = a;
-	}else if(b >= a && b >= c) {
-		max = b;
-	}else {
-		max = c;
-	}		
+public boolean primeChecker(int num) {
+	boolean flag;
+	for (int i = 2; i <= num / 2; i++) {
+		if (num % i == 0) {
+			flag = false;
+			//first assertion here
+			//second assertion here 
+			return flag;
+		}
+	}
+	
+	flag = true;
+	//third assertion here
+	return flag;
 }
 ```
 ## **[Key](AssertExKey.md)**
