@@ -14,7 +14,7 @@ title: JML Tutorial - Exercises - ...
 }
 ```
 **Answer and Explanation:**
-<span style="color:red">red The function below takes in an integer number variable num, and will multiply this number by 2 and return it. However, the OpenJML fails to verify the program with the current specifications. To figure out why the program is failing lets determine what we do know. 
+<span style="color:red">The function below takes in an integer number variable num, and will multiply this number by 2 and return it. However, the OpenJML fails to verify the program with the current specifications. To figure out why the program is failing lets determine what we do know. 
 
 Since the number being passed in is a whole number, we know that the returned result will always be greater than the original number passed in when the number is greater than 0. In other words we can ensure the result will always be greater than num, required that num is greater than zero. However, we also need to take into account the return type is an int; therefore, we need to make sure that the number being passed in * 2 does not exceed the range of the type int. 
 
