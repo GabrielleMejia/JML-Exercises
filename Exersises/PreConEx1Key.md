@@ -3,103 +3,124 @@ title: JML Tutorial - Exercises - ...
 ---
 <i>Last Modified: <script type="text/javascript"> document.write(new Date(document.lastModified).toUTCString())</script></i>
 
-# Postcondition Exercises Key:
+# Precondition Exercises Key:
 ## **Question 1**
-**(a) The function given below is unable to be verified; determine where in the specifications it is failing, and fix it.**
+**The function below will update a user's bank account after making a purchase of a certain number of items. We want to make sure that the user's bank account is never below $0.00. What specifications can we implement to ensure that the user's bank account is never negative?**
 ```Java
-//@ requires num > 0;
-//@ ensures \result > num;
- public int multiplyByTwo(int num) {
-	return num*2;
+public double bankUpdate(double bankAccount, double price, int n) {
+	bankAccount = bankAccount - (price*n);
+	return bankAccount;
 }
 ```
-**Answer and Explanation:**
-The function below takes in an integer number variable `num`, and will multiply this number by 2 and return it. However, OpenJML fails to verify the program with the current specifications. To figure out why the program is failing lets determine what we do know. 
+**Asnwer and Explanation:**
+Let's determine what we know; the function takes in three parameters, the current amount in the user's bank account, the price of an item, and the number of items to be purchased. The goal of this function is to update the user's bank account, but also ensure that their bank account does not dip below zero dollars. To ensure that this does not happen we need to check the following: the current amount in the user's bank account is greater to zero; the cost of one item is greater than or equal to zero; and that purchasing n items doesn't make the user's bank account negative. If all these requirements are met, we can ensure that the user's bank account will not be below $0.00. 
 
-Since the number being passed in is a whole number, we know that the returned result will always be greater than the original number passed in when the number is greater than 0. In other words we can ensure the result will always be greater than num, required that num is greater than zero. However, we also need to take into account the return type is an `int`; therefore, we need to make sure that the number being passed in * 2 does not exceed the range of the type int. 
-
-We can see here that the program fails to verify because we are not specifying the range of `num`. To fix this problem, we simply need to include how big `num` can be.
+However, it is important to note that since we are dealing with floating points (doubles in this case) we need to ensure that the inputs passed into the function are not "not a number" AKA `NaN`. We can use the function `isNan()` of the class Double which checks if the input `bankAccount` or `price` in this case are `NaN`, and then require that the inputs are not `NaN`. By doing this we can avoid potential problems if a user were to pass in a `NaN` value. OpenJML will not check `NaN` inputs on its own, so it is important to include this requirement when working with floating points to avoid potential errors.
 ```Java
-//@ requires num > 0;
-//@ requires num < Integer.MAX_VALUE;
-//@ requires num*2 < Integer.MAX_VALUE;
-//@ ensures \result > num;
-public int multiplyByTwo(int num) {
-	return num*2;
-}
-```
-			
-By including the second requirement that `num < Integer.MAX_VALUE` and `num*2 < Integer.MAX_VALUE`, we can now ensure that the result will always be greater than the original number passed in.
-
-**(b) Suppose that the specifications for num were updated so that it only has to be greater than -1.  Determine why this would cause an error, and how you could fix the remaining specifications to verify the function.**
-
-**Answer and Explanation:**
-First it is important to understand how `num > -1` affects the code. Saying that `num > -1` now includes zero as a potential input. If `num = 0`, then result would equal zero (0 * 2 = 0). Therefore, we cannot ensure that the result is greater than `num`, because in this case it is equal to `num`. To fix this, we simply have to edit the postcondition to the following:
-```Java
-//@ requires num > -1;
-//@ requires num < Integer.MAX_VALUE;
-//@ requires num*2 < Integer.MAX_VALUE;
-//@ ensures \result >= num;
-public int multiplyByTwo(int num) {
-	return num*2;
-}
-```
-
-**(c) Suppose the code was updated to the following, and num must be a positive number. Determine the specifications needed to verify the function.**
-```Java
- public int multiplyByTwo(int num) {
-	return num/2;
-}
-```
-**Answer and Explanation:**
-First let's start with what we know. We are told that `num` must be positive, therefore, `num > 0` - since zero is neither positive nor negative. Secondly, the code has been updated to `num / 2` from `num * 2`. If `num * 2` ensured a value greater than num, then what is `num / 2` ensuring? Well, we know that whenever we divide a whole positive number by anything, the value gets smaller and smaller. Therefore, the code above ensures that the result will be less than the number passed in when `num` is greater than 0. So we can write:
-```Java
-//@ requires num > -1;
-//@ requires num < Integer.MAX_VALUE;
-//@ requires num*2 < Integer.MAX_VALUE;
-//@ ensures \result >= num;
-public int multiplyByTwo(int num) {
-	return num*2;
+//@ requires !Double.isNaN(bankAccount);
+//@ requires bankAccount > 0.0;
+//@ requires !Double.isNaN(price);
+//@ requires price >= 0;
+//@ requires (price*n) <= bankAccount;
+//@ ensures \result >= 0.0;
+public double bankUpdate(double bankAccount, double price, int n) {
+	bankAccount = bankAccount - (price*n);
+	return bankAccount;
 }
 ```
 **Learning Objective:**
-The goal of this exercise is to show students that warnings that might not occur when testing programs by hand still need to be accounted for. In part (a) we see that unless we specify the range of `num` we will have an overflow error because `num * 2` would exceed the range of type int. If you were to input num = 10000000000 by hand, the compiler would tell the client that the value inputted is to large for the return type `int`. Additionally, part (b) has the goal of testing if the student understands how different preconditions affect the postconditions. In part (b) we see that `num` can now be 0, so we need to make sure that our postcondition reflects this change to the preconditions. In this case we have to update that the result can be greater than OR equal to `num`. Finally, part (c) checks if the student can begin to write JML statements on their own. The function is changed slightly to see if the student understands how pre and postconditions cannot simply be copy and pasted for simple functions. 
+The goal of this exercise is to test if the student can identify any and all preconditions needed to ensure that the result of the function does not allow the user's bank account to dip below $0.00. We want to make sure that the student understands that OpenJML is not perfect and that we still need to think of all the possible inputs that could be passed in - which is why making use that we check that any floating point variables passed in are not NaN. 
 
 ## **Question 2**
-**Given a rectangle of width w and height h, write a function that finds the area of the rectangle and returns it. Determine the specifications needed to verify the function. (Assume width and height are whole numbers)**
+**Given an integer array, write a binary search function, and include any specifications needed to verify the function.**
 
-**Answer and Explanation:**
-When coming up with specifications for a program we should first organize the program into pre and post conditions, and consider what we know. We are tasked with writing a function that finds the area of a rectangle of width w and height h. The area of any rectangle is simply A=w∗h, so if we were to code this we would get something like this:
+**Asnwer and Explanation:**
+We are tasked with creating a binary search function given an integer array. First, what do we know needs to be true for a binary search function? We know that the array passed in must already be sorted, it cannot be empty, and depending what we choose as our parameters, we need to make sure that everything is within the range of zero to the array's length. Let's say that we decide to code the following binary search function:
 ```Java
-public int area(int w, int h) {
-	int A = w*h;
-	return A;		
-}	
+public int binarySearch(int[] a, int low, int high, int key) {
+	int mid;		
+	
+	while(low <= high) {
+		mid = (low+high)/2;
+		if(a[mid] == key)
+			return mid;
+		if(a[mid] > key)
+			high = mid - 1;
+		if(a[mid] < key)
+			low = mid + 1;
+	}
+	return -1;
+}
 ```
-Now that we have our function, we want to determine any preconditions and postconditions, so what do we know needs to be true of the area of a rectangle? Firstly, we know that area can never be negative nor zero. Secondly, we also know that in terms of the code, we are returning an integer value, so we have to ensure that `w*h` do not exceed the range of the type `int`. So we can write:
-```Java
-//@ requires w > 0 & h > 0;
-//@ requires w < Integer.MAX_VALUE & h < Integer.MAX_VALUE;
-//@ requires w*h < Integer.MAX_VALUE;
-public int area(int w, int h) {
-	int A = w*h;
-	return A;		
-}	
-```
+In the code above we take in four parameters: the array `a`, the `low` index, the `high` index, and `key` - which is what we are looking for. Within the function we create our variable `mid`, followed by a while-loop that runs while `low <= high` - typical of any binary search. Within the while loop we find our `mid` index and assess if the `key` is greater than `a[mid]`, less than `a[mid]`, or `a[mid]`. Finally, we `return -1` if we find that the key is not in the array. 
 
-However, we're not done yet. Let's say that `w = 2`, `h = 3`, then `A = 6`; what does this mean? This means that since we're multiplying w and h together the result `A` will always be greater than either w or h. Additionally, if `w > 0` and `h > 0`, that means when `w = 1` and `h = 1` would result in `A = 1`. So the result could also equal `w` or `h` if `w = 1` and `h = 1`. Therefore, we can also ensure the following:
+Now that we understand what is going on, let's start adding our JML statements. First we need to make sure that the array != null, secondly that `low` and `high` are within the range of `a`, and finally that the array is sorted. We can come up with the first requirements pretty easily, as seen below:
 ```Java
-//@ requires w > 0 & h > 0;
-//@ requires w < Integer.MAX_VALUE & h < Integer.MAX_VALUE;
-//@ requires w*h < Integer.MAX_VALUE;
-//@ ensures \result > 0;
-//@ ensures \result >= w;
-//@ ensures \result >= h;
-public int area(int w, int h) {
-	int A = w*h;
-	return A;		
-}	
+//@ requires a != null;
+//@ requires 0 <= low < a.length;
+//@ requires 0 <= high < a.length;
+public int binarySearch(int[] a, int low, int high, int key) {
+	int mid;		
+	
+	while(low <= high) {
+		mid = (low+high)/2;
+		if(a[mid] == key)
+			return mid;
+		if(a[mid] > key)
+			high = mid - 1;
+		if(a[mid] < key)
+			low = mid + 1;
+	}
+	return -1;
+}
+```
+However, now we need to make sure that the array `a` is sorted. How do we do this? We need to use the `\forall` clause, which will be discussed in the "[JML Expressions](https://www.openjml.org/tutorial/Expressions)" tutorial. So for now don't worry about the syntax, let's just make sure we understand what the requirement is doing.
+```Java
+//@ requires a != null;
+//@ requires 0 <= low < a.length;
+//@ requires 0 <= high < a.length;
+//@ requires (\forall int i; 0 < i && i < a.length; a[i-1] <= a[i]);
+public int binarySearch(int[] a, int low, int high, int key) {
+	int mid;		
+	
+	while(low <= high) {
+		mid = (low+high)/2;
+		if(a[mid] == key)
+			return mid;
+		if(a[mid] > key)
+			high = mid - 1;
+		if(a[mid] < key)
+			low = mid + 1;
+	}
+	return -1;
+}
+```
+The last requirement is simply checking that that the array is sorted. The `\forall` clause acts as a for-loop in JML, and can be very useful when we want to ensure that something is true for a range of values. In this case the `\forall` clause is checking that the array is sorted for `i` greater than zero and less than `a.length`. We also need to include some assume statements within the while-loop to make sure that `a[mid]` is not out of bounds of the array. We will study the assume clause in more depth in the "[Assume Statements](https://www.openjml.org/tutorial/AssumeStatement)" tutorial. For now, just know that the code above will cause error unless the assume statement is included as seen below:
+```Java
+//@ requires a != null;
+//@ requires 0 <= low < a.length;
+//@ requires 0 <= high < a.length;
+//@ requires (\forall int i; 0 < i && i < a.length; a[i-1] <= a[i]);
+public int binarySearch(int[] a, int low, int high, int key) {
+	int mid;		
+	
+	while(low <= high) {
+		//@ assume 0 <= (low+high) < a.length;
+		mid = (low+high)/2;
+		if(a[mid] == key)
+			return mid;
+		if(a[mid] > key)
+			high = mid - 1;
+		if(a[mid] < key)
+			low = mid + 1;
+	}
+	return -1;
+}
 ```
 **Learning Objective:**
-The goal of this exercise is to test the student's ability to find all the pre/postconditions needed when writing a function. The student is tasked with writing a simple function that takes in the width and height of a rectangle and returns the area. It requires that the student have some understanding of mathematics to know that Area can never be negative nor zero. Therefore, the student needs to ensure that the preconditions reflect this. Additionally, it tests that students take into account potential inputs that might cause an over flow error since we are multiply two integers and returning an integer. The bigger test comes with the postconditions. If the student can determine that Area cannot be negative nor zero than what does this ensure of the function? It ensures that the result is always greater than 0, and that the result will always be greater than or equal to the width and height of the rectangle. It is also important that students realize that ensuring these postconditions will prevent any errors that might occur if this code is used in another program and a client tries to input values that are not valid.
+The goal of this exercise is to test if the user understands how requirements might be used with arrays since there are some very important preconditions we have to consider. Depending how the student chooses to write their binary search will determine what their requirements look like; however, they should understand that while the syntax of the precondition statements might alter from program to program it is still vital that the preconditions are included. For example, if the student were to only pass in the array and the key, they should still include a precondition that ensures that the length of the array is not outside the range of the type int. Students should also know to check that the array is not empty regardless of how they code their binary search. It also introduces some new concepts like the `\forall` clause which we do not expect the student to understand fully - but we want them to understand how requirements can be used to ensure that the function they wrote performs properly. In this case the student should be able to recognize that a binary search *requires* that the array we are searching through is already sorted. This allows the students to know without a doubt that the program will throw an exception if this is not met and will allow them to spend less time sifting through results that don't make sense.
 
+## **Resources:**
++ [Precondition Exercises](PreConEx1.md)
++ [Question 1 Java](PreconditionExample1.java)
++ [Question 2 Java](PreconditionExample2.java)
