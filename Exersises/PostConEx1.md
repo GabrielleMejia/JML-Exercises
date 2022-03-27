@@ -13,6 +13,7 @@ title: JML Tutorial - Exercises - ...
 	return num*2;
 }
 ```
+{% include_relative PostconditionExample1.java %}
 **(b) Suppose that the specifications for num were updated so that it only has to be greater than -1.  Determine why this would cause an error, and how you could fix the remaining specifications to verify the function.**
 
 **(c) Suppose the code was updated to the following, and num must be a positive number. Determine the specifications needed to verify the function.**
