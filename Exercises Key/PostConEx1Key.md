@@ -62,7 +62,42 @@ public int multiplyByTwo(int num) {
 	return num*2;
 }
 ```
+**Learning Objective:**
+The goal of this exercise is to show students that warnings that might not occur when testing programs by hand still need to be accounted for. In part (a) we see that unless we specify the range of `num` we will have an overflow error because `num * 2` would exceed the range of type int. If you were to input num = 10000000000 by hand, the compiler would tell the client that the value inputted is to large for the return type `int`. Additionally, part (b) has the goal of testing if the student understands how different preconditions affect the postconditions. In part (b) we see that `num` can now be 0, so we need to make sure that our postcondition reflects this change to the preconditions. In this case we have to update that the result can be greater than OR equal to `num`. Finally, part (c) checks if the student can begin to write JML statements on their own. The function is changed slightly to see if the student understands how pre and postconditions cannot simply be copy and pasted for simple functions. 
 
 ## **Question 2**
 **Given a rectangle of width w and height h, write a function that finds the area of the rectangle and returns it. Determine the specifications needed to verify the function. (Assume width and height are whole numbers)**
+
+**Answer and Explanation:**
+When coming up with specifications for a program we should first organize the program into pre and post conditions, and consider what we know. We are tasked with writing a function that finds the area of a rectangle of width w and height h. The area of any rectangle is simply A=w∗h, so if we were to code this we would get something like this:
+```Java
+public int area(int w, int h) {
+	int A = w*h;
+	return A;		
+}	
+```
+Now that we have our function, we want to determine any preconditions and postconditions, so what do we know needs to be true of the area of a rectangle? Firstly, we know that area can never be negative nor zero. Secondly, we also know that in terms of the code, we are returning an integer value, so we have to ensure that w*h do not exceed the range of the type int. So we can write:
+```Java
+//@ requires w > 0 & h > 0;
+//@ requires w < Integer.MAX_VALUE & h < Integer.MAX_VALUE;
+//@ requires w*h < Integer.MAX_VALUE;
+public int area(int w, int h) {
+	int A = w*h;
+	return A;		
+}	
+```
+
+However, we're not done yet. Let's say that w = 2, h = 3, then A = 6; what does this mean? This means that since we're multiplying w and h together the result (A) will always be greater than either w or h. Additionally, if `w > 0` and `h > 0`, that means w = 1 and h = 1 which would result in A = 1. So the result could also equal w or h if w = 1 and h = 1. Therefore, we can also ensure the following:
+```Java
+//@ requires w > 0 & h > 0;
+//@ requires w < Integer.MAX_VALUE & h < Integer.MAX_VALUE;
+//@ requires w*h < Integer.MAX_VALUE;
+//@ ensures \result > 0;
+//@ ensures \result >= w;
+//@ ensures \result >= h;
+public int area(int w, int h) {
+	int A = w*h;
+	return A;		
+}	
+```
 
