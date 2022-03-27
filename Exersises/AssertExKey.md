@@ -11,14 +11,14 @@ title: JML Tutorial - Exercises - ...
 To find the largest value of three integers we know we have to compare each integer against the other two. We can write the code below to do this:
 ```Java
 public void max(int a, int b, int c) {
-		int max;
-		if(a >= b && a >= c) {
-			max = a;
-		}else if(b >= a && b >= c) {
-			max = b;
-		}else {
-			max = c;
-		}
+	int max;
+	if(a >= b && a >= c) {
+		max = a;
+	}else if(b >= a && b >= c) {
+		max = b;
+	}else {
+		max = c;
+	}
 }
 ```
 Note that we say greater than or equal to when comparing since we were not told that each integer would be distinct from the others. Therefore let's determine what assumptions can be made. Remember that `asserts` is used when a condition is expected to "hold at a point within the body of a method." So what can we assert in the function above? We know that since we are checking if the values are greater than or equal to each other, one value will be set to `max` no matter what. Therefore, we can assert the following:
@@ -26,16 +26,16 @@ Note that we say greater than or equal to when comparing since we were not told 
 // @ ensures \result >= a && \result >= b && \result >= c;
 // @ ensures \result == a || \result == b || \result == c;
 public void max(int a, int b, int c) {
-		int max;
-		if(a >= b && a >= c) {
-			max = a;
-		}else if(b >= a && b >= c) {
-			max = b;
-		}else {
-			max = c;
-		}
-    //@ assert max >= a && max >= b && max >= c;
-		//@ assert max == a || max == b || max == c;
+	int max;
+	if(a >= b && a >= c) {
+		max = a;
+	}else if(b >= a && b >= c) {
+		max = b;
+	}else {
+		max = c;
+	}
+	//@ assert max >= a && max >= b && max >= c;
+	//@ assert max == a || max == b || max == c;
 }
 ```
 **Learning Objective:**
