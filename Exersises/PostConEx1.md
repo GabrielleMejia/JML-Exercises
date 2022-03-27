@@ -21,5 +21,6 @@ title: JML Tutorial - Exercises - ...
 	return num/2;
 }
 ```
-
+## **Question 2**
+**Given a rectangle of width w and height h, write a function that finds the area of the rectangle and returns it. Determine the specifications needed to verify the function. (Assume width and height are whole numbers)**
 
