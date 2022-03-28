@@ -11,17 +11,21 @@ title: JML Tutorial - Exercises - ...
 **The following code has an error with finding the max value in an array. Given the array a = {3, 12, 7, 0, 5, 9}, the function is printing that the max value is 9. Determine how assume can be used to find where in the code the error occurs.**
 ```Java
 //@ requires a != null;
-public int[] reverseArray(int[] a) {
-	int len = a.length;
-	int[] b = new int[len];
+//@ ensures (\forall int k; 0 < k < a.length; a[k-1] <= a[k]);
+public void sortFindMax(int[] a) {
+	int max;
 
-  for (int i = 0; i < a.length; i++) {
-		b[len - 1] = a[i];
-		len--;			
+	for (int i = 0; i < a.length-1; i++) {
+		for (int j = 0; j < a.length; j++) {
+			if (a[i] > a[j]) {
+				int temp = a[i];
+				a[i] = a[j];
+				a[j] = temp;
+			}
+		}
 	}
 		
-	return b;
-
+	max = a[a.length-1];
 }
 ```
 ## **[Key](AssumeExKey.md)**
