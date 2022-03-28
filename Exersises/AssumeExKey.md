@@ -46,9 +46,53 @@ public int[] reverseArray(int[] a) {
 The goal of this exercise is to see if the student understands one way that the assume clause can be used at this point in the students' studies. The tutorial on assume statements goes over this use of assumes well, so it should be easy for the student to determine where the assumption clause should be put to ensure that there are no warnings. This also gives the student a taste of what is to come by using loop invariants which will come later. The questions also requires that the student recall past tutorials. 
 
 ## **Question 2**
-**Given the function below, what assertions can be concluded?**
+**The following code has an error with finding the max value in an array. Determine how assume can be used to find where in the code the error occurs.**
+```Java
+//@ requires a != null;
+//@ ensures (\forall int k; 0 < k < a.length; a[k-1] <= a[k]);
+//@ ensures (\exists int k; 0 < k < a.length; \result >= a[k]);
+public int sortFindMax(int[] a) {
+	int max;
 
+	for (int i = 0; i < a.length-1; i++) {
+		for (int j = 0; j < a.length; j++) {
+			if (a[i] > a[j]) {
+				int temp = a[i];
+				a[i] = a[j];
+				a[j] = temp;
+			}
+		}
+	}
+		
+	max = a[a.length-1];
+	return max;
+}
+```
 **Asnwer and Explanation:**
+Given the code above we are tasked with utilizing the assume clause to find where in the code the error is, since the function is not finding the correct max value in the array. First, let's break down what the function is doing. The function is first sorting the array using a selection sort, and then sets max = a[a.length-1] - since, if the array is properly sorted in ascending order the max value should be in the last position of the array. So we might want to check if the selection sort is sorting properly. However, before checking our selection sort, let's include our assume statements for the for-loops, since we need to specify that our indices don't go out of bounds when we iterate through.
+```java
+//@ requires a != null;
+//@ ensures (\forall int k; 0 < k < a.length; a[k-1] <= a[k]);
+//@ ensures (\exists int k; 0 < k < a.length; \result >= a[k]);
+public int sortFindMax(int[] a) {
+	int max;
+
+	for (int i = 0; i < a.length-1; i++) {
+		for (int j = i+1; j < a.length; j++) {
+			//@ assume 0 <= i < a.length;
+			//@ assume 0 <= j < a.length;
+			if (a[i] > a[j]) {
+				int temp = a[i];
+				a[i] = a[j];
+				a[j] = temp;
+			}
+		}
+	}
+		
+	max = a[a.length-1];
+	return max;
+}
+```
 
 **Learning Objective:** 
 
