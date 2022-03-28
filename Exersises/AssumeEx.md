@@ -12,7 +12,8 @@ title: JML Tutorial - Exercises - ...
 ```Java
 //@ requires a != null;
 //@ ensures (\forall int k; 0 < k < a.length; a[k-1] <= a[k]);
-public void sortFindMax(int[] a) {
+//@ ensures (\exists int k; 0 < k < a.length; \result >= a[k]);
+public int sortFindMax(int[] a) {
 	int max;
 
 	for (int i = 0; i < a.length-1; i++) {
@@ -26,6 +27,7 @@ public void sortFindMax(int[] a) {
 	}
 		
 	max = a[a.length-1];
+	return max;
 }
 ```
 ## **[Key](AssumeExKey.md)**
