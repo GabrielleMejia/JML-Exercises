@@ -89,6 +89,6 @@ public boolean primeChecker(int num) {
 The goal of this exercise is to see if the student can identify what assertions can be made at certain points in the code. To avoid confusion the student is told where in the code the assert is meant to me added. This exercise also checks that the student understand that we cannot assert false because this will cause an error in OpenJML, which is why we assert that the variable flag can be false.
 
 ## **Resources:**
-+ [Precondition Exercises](AssertEx.md)
++ [Assert Statements Exercises](AssertEx.md)
 + [Question 1 Java](AssertExample1.java)
 + [Question 2 Java](AssertExample2.java)
