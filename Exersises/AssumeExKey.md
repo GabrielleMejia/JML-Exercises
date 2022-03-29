@@ -71,7 +71,7 @@ public int sortFindMax(int[] a) {
 **Asnwer and Explanation:**
 Given the code above we are tasked with utilizing the `assume` clause to find where in the code the error is, since the function is not finding the correct max value in the array. First, let's break down what the function is doing. The function is first sorting the array using a selection sort, and then sets `max = a[a.length-1]` - since, if the array is properly sorted in ascending order the max value should be in the last position of the array. Notice the pre and post conditions of the function. The function requires that `a != null`, typical when using arrays. However, there are two ensures clauses that use a `\forall` and `\exists` clause, we haven't seen how to use these yet as they will come up later in the "[JML Expressions](https://www.openjml.org/tutorial/Expressions)" tutorial. Essentially, the first ensures statement checks for the range of 0 to `a.length` the array should be sorted after the function call. The second ensures statement checks that there exists a max value in the array for the range 0 to `a.length`.
 
-Now that we understand the code and the pre and postconditions let's start debugging. First, let's include our assume statements for the for-loops, since we need to specify that our indices don't go out of bounds when we iterate through.
+Now that we understand the code and the pre and postconditions let's start debugging. First, let's include our `assume` statements for the for-loops, since we need to specify that our indices don't go out of bounds when we iterate through.
 ```java
 //@ requires a != null;
 //@ ensures (\forall int k; 0 < k < a.length; a[k-1] <= a[k]);
@@ -95,7 +95,7 @@ public int sortFindMax(int[] a) {
 	return max;
 }
 ```
-The current code when ran with OpenJML will warn us that the second ensures statement cannot be verified. So we cane use the assume clause to check different parts of our code to narrow down where the error might be. First, let's check the selection sort by using the following assume statement below. By using the an assume statement here we are telling OpenJML to assume that our sort works as intended.
+The current code when ran with OpenJML will warn us that the second ensures statement cannot be verified. So we cane use the assume clause to check different parts of our code to narrow down where the error might be. First, let's check the selection sort by using the following `assume` statement below. By using the an `assume` statement here we are telling OpenJML to assume that our sort works as intended.
 ```java
 //@ requires a != null;
 //@ ensures (\forall int k; 0 < k < a.length; a[k-1] <= a[k]);
@@ -121,7 +121,7 @@ public int sortFindMax(int[] a) {
 	return max;
 }
 ```
-When we run this we still get an error that the second ensures statement cannot be verified. So let's check that our max is being set to the correct value by using another assume statement.
+When we run this we still get an error that the second ensures statement cannot be verified. So let's check that our `max` is being set to the correct value by using another `assume` statement.
 ```java
 //@ requires a != null;
 //@ ensures (\forall int k; 0 < k < a.length; a[k-1] <= a[k]);
@@ -148,7 +148,7 @@ public int sortFindMax(int[] a) {
 	return max;
 }
 ```
-After including this second assume statement our function finally verifies - but we have narrowed down that our error must be within the selection sort. You might have already caught it, but in the selection sort we have j = 0, when it needs to be j = i+1. Something like that might be hard to find in an extensive program, so assume helps us to cut down the time of debugging. If we fix the code we see that the correct max value is found and the function can be verified. 
+After including this second `assume` statement our function finally verifies - but we have narrowed down that our error must be within the selection sort. You might have already caught it, but in the selection sort we have `j = 0`, when it needs to be `j = i + 1`. Something like that might be hard to find in an extensive program, so `assume` helps us to cut down the time of debugging. If we fix the code we see that the correct max value is found and the function can be verified. 
 ```java
 //@ requires a != null;
 //@ ensures (\forall int k; 0 < k < a.length; a[k-1] <= a[k]);
@@ -176,10 +176,10 @@ public int sortFindMax(int[] a) {
 }
 ```
 **Learning Objective:** 
-The goal of this exercise is to check if the student understands how the assume clause can be used for debugging. In this example the student is told that the code does not work and we want them to go through and use assume to find the error in the code. In doing so the student should see how assume makes debugging more efficient. The student will also see how we still need to use assume right now to make sure that we don't go out of bounds.
+The goal of this exercise is to check if the student understands how the `assume` clause can be used for debugging. In this example the student is told that the code does not work and we want them to go through and use `assume` to find the error in the code. In doing so the student should see how `assume` makes debugging more efficient. The student will also see how we still need to use `assume` right now to make sure that we don't go out of bounds.
 
 ## **Resources:**
-+ [Assert Statements Exercises](AssertEx.md)
-+ [Question 1 Java](AssertExample1.java)
-+ [Question 2 Java](AssertExample2.java)
++ [Assume Statements Exercises](AssumeEx.md)
++ [Question 1 Java](AssumeExample1.java)
++ [Question 2 Java](AssumeExample2.java)
 
