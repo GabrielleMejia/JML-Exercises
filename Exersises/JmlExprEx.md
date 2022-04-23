@@ -28,5 +28,13 @@ public boolean primeChecker(int num) {
 ```Java
 public boolean modusPonens(boolean p, boolean q);
 ```
+**On the subject of Modus Ponens:**
+Modus Ponens is a rule of inference, which states that if p is true, and p implies q, then q is true. Take a look at the truth table below. 
+|   p    |   q    | p -> q |
+|--------|--------|--------|
+|  true  |  true  |  true  |
+|  true  |  false |  false |
+|  false |  true  |  true  |
+|  false |  false |  true  |
 
 ## **[Key](JmlExprExKey.md)**
