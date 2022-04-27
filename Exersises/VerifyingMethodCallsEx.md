@@ -15,9 +15,9 @@ public boolean sameSize(int[] a, int[] b);
 ```Java
 //@ ensures \result <==> (area(w, h) > materialSqFt);
 public boolean enoughMaterial(int materialSqFt, int w, int h) {
-		int area = area(w, h);
+	int area = area(w, h);
 		
-		return (area > materialSqFt);	
+	return (area > materialSqFt);	
 }
 	
 //@ ensures \result > 0;
@@ -25,9 +25,9 @@ public boolean enoughMaterial(int materialSqFt, int w, int h) {
 //@ ensures \result >= h;
 //@ pure
 public int area(int w, int h) {
-    int A = w*h;
+	int A = w*h;
 
-		return A;	
+	return A;	
 }
 ```
 ## **[Key](VerifyingMethodCallsExKey.md)**
