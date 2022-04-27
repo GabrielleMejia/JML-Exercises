@@ -34,7 +34,6 @@ public int search(int[] a, int key) {
 			return i;	
 		}
 	}
-	//@ assert !(\exists int j; 0 <= j < a.length; a[j] == key);
  	return -1;
 }
 ```
