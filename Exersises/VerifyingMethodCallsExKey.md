@@ -111,6 +111,69 @@ public boolean sameSize(int[] a, int[] b) {
 **Learning Objective:** 
 The goal of this exercise is to see if the student understands how to verify method calls. This is a rather simple example, so the student should be able to identify the statements needed to verify functions. The exercise also checks that the student understands and can utilize information from past exercises as well. It also checks if the student can also identify all specifications needed - not just those used for verifying method calls.
 
+## **Question 2**
+**The program below is checking whether the user has enough material for an area given the dimensions of the area and the amount of material the user has. However, the program is unable to be verified; determine where in the specifications it is failing, and fix it.**
+```Java
+//@ ensures \result <==> (area(w, h) > materialSqFt);
+public boolean enoughMaterial(int materialSqFt, int w, int h) {
+	int area = area(w, h);
+		
+	return (area > materialSqFt);	
+}
+	
+//@ ensures \result > 0;
+//@ ensures \result >= w;
+//@ ensures \result >= h;
+//@ pure
+public int area(int w, int h) {
+	int A = w*h;
+
+	return A;	
+}
+```
+**Asnwer and Explanation:**
+The program above is unable to be verified with its current specifications, let's break it down and see where the issues lie. The first function `enoughMaterial()` takes in three integer variables `materialSqFt`, `w`, and `h`. It then creates an integer `area` which is set equal to the function `area(w,h)`. If we drop down to the `area()` function we see that the code is the same as we've seen in past exercises, and simply finds the rectangular area given `w` and `h` and returns it. After `area(w,h)` is called in `enoughMaterial()`, the function checks if the `area > materialSqFt`. In the event that `area > materialSqFt` it returns false, otherwise it returns true. 
+ 
+First, we can see that there will be an overflow error in the function `area()` unless we include a precondition that checks that `0 <= w <= Integer.MAX_VALUE` and `0 <= b <= Integer.MAX_VALUE`. Otherwise, all our preconditions and postconditions for the two functions look good. 
+
+However, since `enoughMaterial()` calls `area()` we need to include some `assume` and `assert` statements to verify the two methods. Again we know the process for any function is 
+at the call site assert the precondition of the called method, and then assume the callee's postconditions. So what might we include in the program above?
+ 
+Let's start in the function `area()`; after we include that `w` and `h` need to be greater than zero, and less than or equal `Integer.MAX_VALUE`, we would need to assume this in the function. We would also want to assume that `w*h <= Integer.MAX_VALUE` so we don't get any overflow errors. After the body of the function and before the return statement, we want to include an `assert` statement that asserts our area postconditions. Now, back to the `enoughMaterial()` function, in this function we want to `assume` it's preconditions, and `assert` it's postconditions. However, before we call `area()` we want to assert `area()`'s precondtions, and then `assume` it's postconditions after the call. So we can write something like this to verify the program:
+```Java
+//@ requires materialSqFt > 0;
+	//@ requires 0 < w <= Integer.MAX_VALUE & 0 < h <= Integer.MAX_VALUE;
+	//@ ensures \result <==> (area(w, h) > materialSqFt);
+	public boolean enoughMaterial(int materialSqFt, int w, int h) {
+		//@ assume materialSqFt > 0 && 0 < w <= Integer.MAX_VALUE & 0 < h <= Integer.MAX_VALUE;
+		
+		//@ assert 0 < w <= Integer.MAX_VALUE && 0 < h <= Integer.MAX_VALUE;
+		int area = area(w, h);
+		
+		//@ assume area > 0 && area >= w && area >= h;
+		
+		//@ assert (area > materialSqFt);
+		return (area > materialSqFt);	
+	}
+	
+	//@ requires 0 < w <= Integer.MAX_VALUE & 0 < h <= Integer.MAX_VALUE;
+	//@ ensures \result > 0;
+	//@ ensures \result >= w;
+	//@ ensures \result >= h;
+	//@ pure
+	public int area(int w, int h) {
+		//@ assume 0 < w <= Integer.MAX_VALUE & 0 < h <= Integer.MAX_VALUE;
+		//@ assume w*h <= Integer.MAX_VALUE;
+		int A = w*h;
+		
+		//@ assert A > 0 && A >= w && A >= h;
+		return A;	
+	}	
+```
+**Learning Objective:** 
+The goal of this exercise is to show the student the necessity of verifying method calls. This exercise is much more complex than the first exercise, and shows that the program cannot be verified without out `assume` and `assert` statements of the pre and postconditions. We want the student to get more comfortable with the process of verifying method calls, and understand it follows the same process every time.
+
 ## **Resources:**
 + [Verifying Method Calls Exercises](VerifyingMethodCallsEx.md)
 + [Question 1 Java](MethodCallsExample1.java)
++ [Question 2 Java](MethodCallsExample2.java)
