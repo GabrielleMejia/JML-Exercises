@@ -18,6 +18,7 @@ public int[] addArrays(int[] a, int[] b) {
 		for(int i = 0; i < a.length; i++) {
         		newArr[i] = a[i] + b[i];
 		}	
+		return newArr;
 	}
 	return new int[0];
 }
@@ -36,6 +37,7 @@ public int[] addArrays(int[] a, int[] b) {
 		for(int i = 0; i < a.length; i++) {
 			newArr[i] = a[i] + b[i];
 		}	
+		return newArr;
 	}
 	return new int[0];
 }
@@ -45,16 +47,20 @@ public boolean sameSize(int[] a, int[] b) {
 }
 
 ```
-As for the `addArrays()` function let’s think about what preconditions we might want to require; we are adding the elements from `a` and `b` and any time we are dealing with integer arithmetic we want to make sure we remain in the size of type int. So we can use the `forall` clause to check that `a[i] + b[i] <= Integer.MAX_VALUE`. Additionally, since the function will return an empty array if `a` and `b` aren’t the same size we can ensure two things to be true. The `\result` will be an integer array where for all index `j` less than the length of resulting array, `\result[j]` will be equal to `a[j] + b[j]`. Secondly, if `a` and `b` aren;t the same length then `\result` will be null. As we move on you will see better ways of handling exceptions and different method behaviors, but for now we can write something like the following: 
+As for the `addArrays()` function let’s think about what preconditions we might want to require; we are adding the elements from `a` and `b` and any time we are dealing with integer arithmetic we want to make sure we remain in the size of type `int`. So we can use the `forall` clause to check that `a[i] + b[i] <= Integer.MAX_VALUE`. Additionally, since the function will return an empty array if `a` and `b` aren’t the same size we can ensure two things to be true. The `\result` will have the length equal to that of either array `a` or `b`. Secondly, if `a` and `b` aren’t the same length then `\result` will be empty and have the length of zero. 
+
+Note:  We can write more complex `ensures` clauses that would actually check if the function `addArrays()` returns an array whose elements are equal to that of `a[i] + b[i]`, but that would require the use of loop invariant which we will get into in the [“Specifying Loops”](https://www.openjml.org/tutorial/Loops) tutorial. Additionally, as we move on you will see better ways of handling exceptions and different method behaviors, but for now we can write something like the following:  
 ```Java
 //@ requires (\forall int j; 0 <= j < a.length; a[j]+b[j] <= Integer.MAX_VALUE);
-//@ ensures (\forall int j; 0 <= j < \result.length; \result[j] == a[j]+b[j]) || \result == null;
+//@ ensures \result.length == a.length || \result.length == 0;
+//@ pure
 public int[] addArrays(int[] a, int[] b) {		
 	if(sameSize(a, b)) {
 		int[] newArr = new int[a.length];
 		for(int i = 0; i < a.length; i++) {
 			newArr[i] = a[i] + b[i];
-		}	
+		}
+		return newArr;
 	}
 	return new int[0];
 }
@@ -67,7 +73,8 @@ public boolean sameSize(int[] a, int[] b) {
 Now, since we are dealing with a for-loop we also have to include an assume statement so we don’t run into any issues going out-of-bounds. Additionally, since we're adding `a[i] + b[i]` we need to account for potential overflow errors like we did in our precondition, so let's also include an assume statement that handles this. 
 ```Java
 //@ requires (\forall int j; 0 <= j < a.length; a[j]+b[j] <= Integer.MAX_VALUE);
-//@ ensures (\forall int j; 0 <= j < \result.length; \result[j] == a[j]+b[j]) || \result == null;
+//@ ensures \result.length == a.length || \result.length == 0;
+//@ pure
 public int[] addArrays(int[] a, int[] b) {		
 	if(sameSize(a, b)) {
 		int[] newArr = new int[a.length];
@@ -75,7 +82,8 @@ public int[] addArrays(int[] a, int[] b) {
 			//@ assume 0 <= i < a.length;
 			//@ assume Integer.MIN_VALUE < a[i] + b[i] <= Integer.MAX_VALUE;
 			newArr[i] = a[i] + b[i];
-		}	
+		}
+		return newArr;
 	}
 	return new int[0];
 }
@@ -88,7 +96,8 @@ public boolean sameSize(int[] a, int[] b) {
  Now that we have included everything from past tutorials, what new specifications do we need after reading "Method Calls?" Recall how a method call is verified; at the call site assert the precondition of the called method, and then assume the callee's postconditions. In our program we only have one preconditions for the caller function `addArrays()` which we’ve already accounted for, and one postcondition for the callee function `sameSize()`. So we can write the following:
 ```Java
 //@ requires (\forall int j; 0 <= j < a.length; a[j]+b[j] <= Integer.MAX_VALUE);
-//@ ensures (\forall int j; 0 <= j < \result.length; \result[j] == a[j]+b[j]) || \result == null;
+//@ ensures \result.length == a.length || \result.length == 0;
+//@ pure
 public int[] addArrays(int[] a, int[] b) {	
 	if(sameSize(a, b)) {
 		//@ assert sameSize(a, b);
@@ -97,7 +106,8 @@ public int[] addArrays(int[] a, int[] b) {
 			//@ assume 0 <= i < a.length;
 			//@ assume Integer.MIN_VALUE < a[i] + b[i] <= Integer.MAX_VALUE;
 			newArr[i] = a[i] + b[i];
-		}	
+		}
+		return newArr;
 	}
 	return new int[0];
 }
