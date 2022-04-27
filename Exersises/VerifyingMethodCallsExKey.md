@@ -142,33 +142,33 @@ at the call site assert the precondition of the called method, and then assume t
 Let's start in the function `area()`; after we include that `w` and `h` need to be greater than zero, and less than or equal `Integer.MAX_VALUE`, we would need to assume this in the function. We would also want to assume that `w*h <= Integer.MAX_VALUE` so we don't get any overflow errors. After the body of the function and before the return statement, we want to include an `assert` statement that asserts our area postconditions. Now, back to the `enoughMaterial()` function, in this function we want to `assume` it's preconditions, and `assert` it's postconditions. However, before we call `area()` we want to assert `area()`'s precondtions, and then `assume` it's postconditions after the call. So we can write something like this to verify the program:
 ```Java
 //@ requires materialSqFt > 0;
-	//@ requires 0 < w <= Integer.MAX_VALUE & 0 < h <= Integer.MAX_VALUE;
-	//@ ensures \result <==> (area(w, h) > materialSqFt);
-	public boolean enoughMaterial(int materialSqFt, int w, int h) {
-		//@ assume materialSqFt > 0 && 0 < w <= Integer.MAX_VALUE & 0 < h <= Integer.MAX_VALUE;
-		
-		//@ assert 0 < w <= Integer.MAX_VALUE && 0 < h <= Integer.MAX_VALUE;
-		int area = area(w, h);
-		
-		//@ assume area > 0 && area >= w && area >= h;
-		
-		//@ assert (area > materialSqFt);
-		return (area > materialSqFt);	
-	}
+//@ requires 0 < w <= Integer.MAX_VALUE & 0 < h <= Integer.MAX_VALUE;
+//@ ensures \result <==> (area(w, h) > materialSqFt);
+public boolean enoughMaterial(int materialSqFt, int w, int h) {
+	//@ assume materialSqFt > 0 && 0 < w <= Integer.MAX_VALUE & 0 < h <= Integer.MAX_VALUE;
 	
-	//@ requires 0 < w <= Integer.MAX_VALUE & 0 < h <= Integer.MAX_VALUE;
-	//@ ensures \result > 0;
-	//@ ensures \result >= w;
-	//@ ensures \result >= h;
-	//@ pure
-	public int area(int w, int h) {
-		//@ assume 0 < w <= Integer.MAX_VALUE & 0 < h <= Integer.MAX_VALUE;
-		//@ assume w*h <= Integer.MAX_VALUE;
-		int A = w*h;
-		
-		//@ assert A > 0 && A >= w && A >= h;
-		return A;	
-	}	
+	//@ assert 0 < w <= Integer.MAX_VALUE && 0 < h <= Integer.MAX_VALUE;
+	int area = area(w, h);
+	
+	//@ assume area > 0 && area >= w && area >= h;
+	
+	//@ assert (area > materialSqFt);
+	return (area > materialSqFt);	
+}
+	
+//@ requires 0 < w <= Integer.MAX_VALUE & 0 < h <= Integer.MAX_VALUE;
+//@ ensures \result > 0;
+//@ ensures \result >= w;
+//@ ensures \result >= h;
+//@ pure
+public int area(int w, int h) {
+	//@ assume 0 < w <= Integer.MAX_VALUE & 0 < h <= Integer.MAX_VALUE;
+	//@ assume w*h <= Integer.MAX_VALUE;
+	int A = w*h;
+	
+	//@ assert A > 0 && A >= w && A >= h;
+	return A;	
+}	
 ```
 **Learning Objective:** 
 The goal of this exercise is to show the student the necessity of verifying method calls. This exercise is much more complex than the first exercise, and shows that the program cannot be verified without out `assume` and `assert` statements of the pre and postconditions. We want the student to get more comfortable with the process of verifying method calls, and understand it follows the same process every time.
