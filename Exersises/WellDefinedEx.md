@@ -7,15 +7,15 @@ title: JML Tutorial - Exercises - Well-defined Expressions
 ```Java
 //@ ensures (\exists int i; 0 <= i < a.length; a[i] == key);
 public int search(int[] a, int key) {
-  int i;
-  for(i = 0; i < a.length; i++) {
-			//@ assume 0 <= i < a.length;
-			if(a[i] == key) { 
-				return i;	
-			}
+	int i;
+  	for(i = 0; i < a.length; i++) {
+		//@ assume 0 <= i < a.length;
+		if(a[i] == key) { 
+			return i;	
 		}
-		//@ assert a[i] == key;
- 		return -1;
+	}
+	//@ assert a[i] == key;
+	return -1;
 }
 ```
 
