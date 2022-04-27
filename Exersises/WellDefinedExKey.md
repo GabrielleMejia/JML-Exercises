@@ -26,17 +26,17 @@ Additionally, there are still more issues with the JML statements. What do we kn
 //@ requires a != null;
 //@ ensures (\exists int i; 0 <= i < a.length; a[i] == key) || \result == -1;
 public int search(int[] a, int key) {
-    int i;
-		for(i = 0; i < a.length; i++) {
-			//@ assume 0 <= i < a.length;
-			if(a[i] == key) { 
-				//@ assert a[i] == key;
-				return i;	
-			}
+	int i;
+	for(i = 0; i < a.length; i++) {
+		//@ assume 0 <= i < a.length;
+		if(a[i] == key) { 
+			//@ assert a[i] == key;
+			return i;	
 		}
-		//@ assert !(\exists int j; 0 <= j < a.length; a[j] == key);
- 		return -1;
 	}
+	//@ assert !(\exists int j; 0 <= j < a.length; a[j] == key);
+ 	return -1;
+}
 ```
 **Learning Objective:** 
 The goal of this exercise is to see if the student understands why the current JML statements are not well-defined, and therefore cannot verify the function. This exercise takes everything the student has learned so far and asks them to use it in practice and write their own well-defined statements that verify the function. We also want to check if the student understands that not all statements are wrong just because OpenJML throws a warning, it might be throwing a warning because the statement is put in the wrong place where OpenJML cannot verify the statement. In this example we see that `//@ assert a[i] == key` is not necessarily wrong, but where it is currently placed in the code, OpenJML cannot make this assertion because `i` would be equal to `a.length`, and therefore out of range and really just means that key isn't in the array.
