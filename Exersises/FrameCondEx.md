@@ -7,19 +7,18 @@ title: JML Tutorial - Exercises - Frame Condtions
 **The program below checks if two integer arrays are the same size and if they are it adds them. However, the code is unable to be verified; determine what specifications are needed to verify the program.**
 ```Java
 //first frame condition
-public void addArrays(int[] a, int[] b) {
-			
-		if(sameSize(a, b)) {
-			int[] temp = a;
-			for(int i = 0; i < a.length; i++) {
-				a[i] = temp[i] + b[i];
-			}	
-		}
+public void addArrays(int[] a, int[] b) {	
+	if(sameSize(a, b)) {
+		int[] temp = a;
+		for(int i = 0; i < a.length; i++) {
+			a[i] = temp[i] + b[i];
+		}	
 	}
+}
 
 //second frame condition 		
 public boolean sameSize(int[] a, int[] b) {
-		return a.length == b.length;
+	return a.length == b.length;
 }
 ```
 ## **Question 2**
@@ -27,9 +26,9 @@ public boolean sameSize(int[] a, int[] b) {
 ```Java
 public class FrameCondExample2 {
 	//@ spec_public
-  private int[] arr = new int[10];
+	private int[] arr = new int[10];
 
-  public void increase(int increase);
+  	public void increase(int increase);
 }
 ```
 **Note:** The `FrameCondExample2` class is included purely to satisfy Java's syntactic requirement that all methods be in a class.
