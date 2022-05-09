@@ -1,7 +1,7 @@
 ---
 title: JML Tutorial - Exercises - Using Method Calls in Specifications 
 ---
-# Using Method Calls in Specifications Key:
+# Using Method Calls in Specifications Exercises:
 ## **Question 1**
 **(a) The program given below is unable to be verified; determine where in the specifications it is failing, and explain why it's failing.**
 **(b) Edit the code so that the original specifications verify the program.**
