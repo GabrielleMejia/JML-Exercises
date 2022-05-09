@@ -106,12 +106,12 @@ Again, to figure our what our second loop invariant condition will be let’s ta
 In this version the memory of `str2` is still be modified, so we still include that the loop assigns `str2[*]`. And as for our termination condition, we simply say `i+1`. Putting that all together we get the following:
 ```Java
 //@ ensures \result.length() == str1.length();
-    	//@ ensures (\forall int j; 
-	//@			0 <= j <= str1.length()-1; 
-	//@			\result.charAt(j) == str1.charAt(str1.length()-j-1));
-	//@ pure
-    public String reverseWord(String str1) {
-        final int length = str1.length();
+//@ ensures (\forall int j; 
+//@			0 <= j <= str1.length()-1; 
+//@			\result.charAt(j) == str1.charAt(str1.length()-j-1));
+//@ pure
+public String reverseWord(String str1) {
+	final int length = str1.length();
         char str2[] = new char[length];
 		
         //@ maintaining -1 <= i <= length-1;
@@ -125,7 +125,7 @@ In this version the memory of `str2` is still be modified, so we still include t
         }
         String res = new String(str2);
         return res;
-    }
+}
 ```
 **Learning Objective:** 
 The goal of this exercise is to give the student more experience with writing specification for loops as it can be somewhat confusing at first. For part (a) we want the student to write not only the specifications for the loop for this example, but also the pre and post conditions as the student should recognize that writing these are helpful when writing specifications for loops. We want the student to become more comfortable with writing these specifications and understand the basic format every time so that when it comes to more complicated programs they won't feel as lost when it comes to having nested loops. We want to check that the student understands what our constraints on our variable `i` are, then if they can identify what the loop should accomplish after every iteration, what is being modified, and what will make the loop terminate. If the student can determine these four specifications they should have a good idea how to start writing loop specifications with less problems. As such, part (b) checks if the student can see how the same pre and postconditions can be resued for a different version of the program, and checks if the student can identify what new loop specifications are needed. This part is a little more complex as it tasks the student with thinking about the loop backwards. 
