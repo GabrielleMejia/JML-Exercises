@@ -13,17 +13,17 @@ title: JML Tutorial - Exercises - Arithmetic
 **(b) How could you edit the code to verify the function with the original specification?**
 ```Java
 //@ spec_public
-	private int playerHealth;
+private int playerHealth;
 	
-	//@ requires dmg <= 0;
-	//@ requires 0 < playerHealth;
-	public int updatePlayerHealth(int dmg) {
-		if(playerHealth > dmg) {
-			return (playerHealth - dmg);
-		}else {
-			return 0;
-		}
+//@ requires dmg <= 0;
+//@ requires 0 < playerHealth;
+public int updatePlayerHealth(int dmg) {
+	if(playerHealth > dmg) {
+		return (playerHealth - dmg);
+	}else {
+		return 0;
 	}
+}
 ```
 **Learning Objectives:**
 + Gain more experience with handling overflow 
