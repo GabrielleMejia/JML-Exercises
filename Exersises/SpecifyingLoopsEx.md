@@ -34,13 +34,6 @@ public String reverseWord(String str1) {
 + Understand how writing postconditions can be helpful to understand what our loop should be doing after every iteration
 + Understand the order to write loop specifications
 + Gain more experience with past tutorial content  
- 
-
-## **Question 2**
-** **
-
-**Learning Objectives:**
-+
 
 ## **[Answer Key](SpecifyingLoopsExKey.md)**
 
