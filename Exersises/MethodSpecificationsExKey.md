@@ -17,16 +17,16 @@ public class Pet {
 	private static int numPets = 0; 
 	
 	//@ public normal_behavior
-  //@	  ensures numPets == \old(numPets) + 1;
-  //@	  assigns numPets;
-  //@	  ensures this.species == species;
-	//@	  requires species.length() > 0;
-  //@	  ensures this.name == name;
-	//@	  requires name.length() > 0;
-  //@	  ensures this.yearsOld == yearsOld;
+  	//@	ensures numPets == \old(numPets) + 1;
+  	//@	assigns numPets;
+  	//@	ensures this.species == species;
+	//@	requires species.length() > 0;
+  	//@	ensures this.name == name;
+	//@	requires name.length() > 0;
+  	//@	ensures this.yearsOld == yearsOld;
 	//@ 	ensures this.weight == weight;
 	//@ 	requires 0 <= yearsOld < 100;
-  //@ 	requires weight > 0;
+  	//@ 	requires weight > 0;
 	//@ 	requires !Double.isNaN(weight);
 	//@ 	ensures this.vaccinated == vaccinated;
 	public Pet(String species, String name, int yearsOld, double weight, boolean vaccinated) {
@@ -58,13 +58,13 @@ public class Pet {
 	private static int numPets = 0; 
 	
 	//@ public normal_behavior
-	//@		requires species.length() > 0;
+	//@	requires species.length() > 0;
 	//@ 	requires name.length() > 0;;
 	//@ 	requires 0 <= yearsOld < 100;
 	//@ 	requires !Double.isNaN(weight);
 	//@ 	requires weight > 0;
 	//@ 	assigns numPets;
-	//@		ensures this.species == species;
+	//@	ensures this.species == species;
 	//@ 	ensures this.name == name;
 	//@ 	ensures this.yearsOld == yearsOld;
 	//@ 	ensures this.weight == weight;
