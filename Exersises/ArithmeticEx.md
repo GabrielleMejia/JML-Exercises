@@ -3,10 +3,23 @@ title: JML Tutorial - Exercises - Arithmetic
 ---
 # Arithmetic Exercises:
 ## **Question 1**
-**Given three integers, write a function that finds which is the largest of the three. Determine the specifications needed to verify the function.**
+**Given the function below determine the strongest preconditions needed to verify the function.**
+```Java
+public class ArithmeticExample1 {
+	//@ spec_public
+	private int sum;
 
+	//@ ensures 0 < sum < Integer.MAX_VALUE;
+	public void sumThreeNums(int n1, int n2, int n3) {
+		sum = n1 + n2 + n3;
+	}	
+}
+```
 **Learning Objectives:**
-+
++ Understand overflow and underflow errors
++ Understand `Integer.MAX_VALUE`
++ Gain more experience writing preconditions
++ Gain more experience with the `assigns` clause
 
 ## **Question 2**
 **(a) The function given below is unable to be verified; determine where in the specifications it is failing, and fix it.**
